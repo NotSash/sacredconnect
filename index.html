@@ -51,11 +51,14 @@
          - Production: set window.__SC_API_BASE__ to your Render URL (or keep empty to use same-origin)
     -->
     <script>
-        // Example (production): window.__SC_API_BASE__ = 'https://sacredconnect-api.onrender.com';
-        // Auto default only for localhost
+        // API Base
+        // - Local dev: http://localhost:5000/api
+        // - Production: Render backend /api
         if (typeof window.__SC_API_BASE__ !== 'string') {
             const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            window.__SC_API_BASE__ = isLocal ? 'http://localhost:5000/api' : '';
+            window.__SC_API_BASE__ = isLocal
+                ? 'http://localhost:5000/api'
+                : 'https://sacredconnect-api.onrender.com/api';
         }
     </script>
 </head>
