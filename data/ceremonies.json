@@ -1,0 +1,308 @@
+{
+  "version": "1.0",
+  "notes": "English-first catalog. Traditional names included for recognition. Nothing here auto-inserts into DB.",
+  "categories": [
+    {
+      "name": "Life Milestones",
+      "slug": "life-milestones",
+      "icon": "🎉",
+      "description": "Family ceremonies for major life events and milestones."
+    },
+    {
+      "name": "Home & Property",
+      "slug": "home-property",
+      "icon": "🏠",
+      "description": "Blessings for home, property, construction and moving-in."
+    },
+    {
+      "name": "Everyday Worship",
+      "slug": "everyday-worship",
+      "icon": "🪔",
+      "description": "Common home ceremonies for wellbeing, prosperity and devotion."
+    },
+    {
+      "name": "Fire Ceremonies",
+      "slug": "fire-ceremonies",
+      "icon": "🔥",
+      "description": "Fire rituals (Havan/Homam) for protection, peace and wellbeing."
+    },
+    {
+      "name": "Festivals",
+      "slug": "festivals",
+      "icon": "🎊",
+      "description": "Festival ceremonies for major Hindu occasions."
+    },
+    {
+      "name": "Protection & Peace",
+      "slug": "protection-peace",
+      "icon": "🛡️",
+      "description": "Peace, protection and remedial ceremonies."
+    },
+    {
+      "name": "Ancestor & Memorial",
+      "slug": "ancestor-memorial",
+      "icon": "🙏",
+      "description": "Memorial and ancestor ceremonies performed with care and respect."
+    },
+    {
+      "name": "Business & Vehicles",
+      "slug": "business-vehicles",
+      "icon": "🏢",
+      "description": "Blessings for new ventures, offices, tools and vehicles."
+    },
+    {
+      "name": "Education & Career",
+      "slug": "education-career",
+      "icon": "📚",
+      "description": "Ceremonies for learning, exams and career transitions."
+    },
+    {
+      "name": "Astrology & Muhurat",
+      "slug": "astrology-muhurat",
+      "icon": "⭐",
+      "description": "Consultations and auspicious time selection."
+    }
+  ],
+  "services": [
+    {
+      "categorySlug": "life-milestones",
+      "name": "Naming Ceremony (Naamkaran)",
+      "slug": "naming-ceremony-naamkaran",
+      "tags": ["baby", "family"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "life-milestones",
+      "name": "Baby Shower Ceremony (Seemantham)",
+      "slug": "baby-shower-ceremony-seemantham",
+      "tags": ["pregnancy", "family"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "life-milestones",
+      "name": "First Solid Food Ceremony (Annaprashan)",
+      "slug": "first-solid-food-ceremony-annaprashan",
+      "tags": ["baby", "family"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "life-milestones",
+      "name": "First Haircut Ceremony (Mundan)",
+      "slug": "first-haircut-ceremony-mundan",
+      "tags": ["baby", "family"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "life-milestones",
+      "name": "Ear Piercing Ceremony (Karnavedha)",
+      "slug": "ear-piercing-ceremony-karnavedha",
+      "tags": ["baby", "family"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "life-milestones",
+      "name": "Thread Ceremony (Upanayanam)",
+      "slug": "thread-ceremony-upanayanam",
+      "tags": ["family"],
+      "typicalDurationHours": [2, 5]
+    },
+    {
+      "categorySlug": "life-milestones",
+      "name": "Engagement Ceremony (Sagai / Nischayathartham)",
+      "slug": "engagement-ceremony-sagai",
+      "tags": ["wedding", "family"],
+      "typicalDurationHours": [1, 3]
+    },
+    {
+      "categorySlug": "life-milestones",
+      "name": "Wedding Ceremony (Vivah)",
+      "slug": "wedding-ceremony-vivah",
+      "tags": ["wedding"],
+      "typicalDurationHours": [3, 8]
+    },
+    {
+      "categorySlug": "life-milestones",
+      "name": "Anniversary Blessing Ceremony",
+      "slug": "anniversary-blessing-ceremony",
+      "tags": ["family"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "life-milestones",
+      "name": "60th Birthday Ceremony (Shashtiabdhapoorthi)",
+      "slug": "60th-birthday-ceremony-shashtiabdhapoorthi",
+      "tags": ["milestone", "chennai"],
+      "typicalDurationHours": [2, 5]
+    },
+    {
+      "categorySlug": "life-milestones",
+      "name": "80th Birthday Ceremony (Sathabhishekam)",
+      "slug": "80th-birthday-ceremony-sathabhishekam",
+      "tags": ["milestone", "chennai"],
+      "typicalDurationHours": [2, 5]
+    },
+
+    {
+      "categorySlug": "home-property",
+      "name": "Housewarming Ceremony (Griha Pravesh)",
+      "slug": "housewarming-ceremony-griha-pravesh",
+      "tags": ["home", "property"],
+      "typicalDurationHours": [2, 4]
+    },
+    {
+      "categorySlug": "home-property",
+      "name": "Foundation Laying Ceremony (Bhoomi Puja)",
+      "slug": "foundation-laying-ceremony-bhoomi-puja",
+      "tags": ["home", "property"],
+      "typicalDurationHours": [1, 3]
+    },
+    {
+      "categorySlug": "home-property",
+      "name": "Home Peace Ceremony (Vastu Shanti)",
+      "slug": "home-peace-ceremony-vastu-shanti",
+      "tags": ["home", "peace"],
+      "typicalDurationHours": [2, 4]
+    },
+
+    {
+      "categorySlug": "everyday-worship",
+      "name": "Prosperity Ceremony (Lakshmi Puja)",
+      "slug": "prosperity-ceremony-lakshmi-puja",
+      "tags": ["prosperity"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "everyday-worship",
+      "name": "Success & Beginnings Ceremony (Ganesh Puja)",
+      "slug": "success-beginnings-ceremony-ganesh-puja",
+      "tags": ["success"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "everyday-worship",
+      "name": "Health & Longevity Ceremony (Maha Mrityunjaya)",
+      "slug": "health-longevity-ceremony-maha-mrityunjaya",
+      "tags": ["health"],
+      "typicalDurationHours": [1, 3]
+    },
+    {
+      "categorySlug": "everyday-worship",
+      "name": "Family Wellbeing Ceremony (Satyanarayan Katha)",
+      "slug": "family-wellbeing-ceremony-satyanarayan-katha",
+      "tags": ["family"],
+      "typicalDurationHours": [2, 3]
+    },
+
+    {
+      "categorySlug": "fire-ceremonies",
+      "name": "Health Fire Ceremony (Ayush Homam)",
+      "slug": "health-fire-ceremony-ayush-homam",
+      "tags": ["health", "chennai"],
+      "typicalDurationHours": [2, 4]
+    },
+    {
+      "categorySlug": "fire-ceremonies",
+      "name": "Long-Life Fire Ceremony (Maha Mrityunjaya Homam)",
+      "slug": "long-life-fire-ceremony-maha-mrityunjaya-homam",
+      "tags": ["health"],
+      "typicalDurationHours": [2, 4]
+    },
+    {
+      "categorySlug": "fire-ceremonies",
+      "name": "Prosperity Fire Ceremony (Lakshmi Homam)",
+      "slug": "prosperity-fire-ceremony-lakshmi-homam",
+      "tags": ["prosperity"],
+      "typicalDurationHours": [2, 4]
+    },
+
+    {
+      "categorySlug": "festivals",
+      "name": "Diwali Festival Ceremony (Lakshmi Puja)",
+      "slug": "diwali-festival-ceremony",
+      "tags": ["festival"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "festivals",
+      "name": "Tamil New Year Ceremony",
+      "slug": "tamil-new-year-ceremony",
+      "tags": ["festival", "chennai"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "festivals",
+      "name": "Varalakshmi Vratham (Chennai)",
+      "slug": "varalakshmi-vratham-chennai",
+      "tags": ["festival", "chennai"],
+      "typicalDurationHours": [1, 3]
+    },
+
+    {
+      "categorySlug": "protection-peace",
+      "name": "General Peace Ceremony (Shanti Puja)",
+      "slug": "general-peace-ceremony-shanti-puja",
+      "tags": ["peace"],
+      "typicalDurationHours": [1, 3]
+    },
+    {
+      "categorySlug": "protection-peace",
+      "name": "Home Protection Ceremony",
+      "slug": "home-protection-ceremony",
+      "tags": ["protection", "home"],
+      "typicalDurationHours": [1, 2]
+    },
+
+    {
+      "categorySlug": "ancestor-memorial",
+      "name": "Annual Memorial Ceremony (Shraddha / Tithi)",
+      "slug": "annual-memorial-ceremony-shraddha",
+      "tags": ["memorial"],
+      "typicalDurationHours": [1, 3]
+    },
+    {
+      "categorySlug": "ancestor-memorial",
+      "name": "Ancestor Offering Ritual (Tarpan)",
+      "slug": "ancestor-offering-ritual-tarpan",
+      "tags": ["memorial"],
+      "typicalDurationHours": [1, 2]
+    },
+
+    {
+      "categorySlug": "business-vehicles",
+      "name": "New Vehicle Blessing Ceremony",
+      "slug": "new-vehicle-blessing-ceremony",
+      "tags": ["vehicle", "business"],
+      "typicalDurationHours": [1, 2]
+    },
+    {
+      "categorySlug": "business-vehicles",
+      "name": "Office Opening Ceremony",
+      "slug": "office-opening-ceremony",
+      "tags": ["business"],
+      "typicalDurationHours": [1, 3]
+    },
+
+    {
+      "categorySlug": "education-career",
+      "name": "Learning Start Ceremony (Vidyarambham)",
+      "slug": "learning-start-ceremony-vidyarambham",
+      "tags": ["education"],
+      "typicalDurationHours": [1, 2]
+    },
+
+    {
+      "categorySlug": "astrology-muhurat",
+      "name": "Auspicious Time Selection (Muhurat)",
+      "slug": "auspicious-time-selection-muhurat",
+      "tags": ["consultation"],
+      "typicalDurationHours": [0.5, 1]
+    },
+    {
+      "categorySlug": "astrology-muhurat",
+      "name": "Horoscope Preparation (Kundli)",
+      "slug": "horoscope-preparation-kundli",
+      "tags": ["consultation"],
+      "typicalDurationHours": [0.5, 1]
+    }
+  ]
+}

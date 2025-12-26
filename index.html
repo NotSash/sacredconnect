@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>SacredConnect - Book Verified Pandits for Religious Ceremonies</title>
+    <meta name="description" content="Connect with verified pandits for pujas, ceremonies, and religious rituals. Transparent pricing, authentic services across India.">
+    <meta name="keywords" content="pandit booking, pandit, puja, hindu ceremonies, wedding pandit, havan, religious services, online pandit booking">
+    <meta name="author" content="SacredConnect">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#ED7B12">
+    <meta name="msapplication-TileColor" content="#ED7B12">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sacredconnect.com/">
+    <meta property="og:title" content="SacredConnect - Book Verified Pandits for Religious Ceremonies">
+    <meta property="og:description" content="Connect with verified pandits for pujas, ceremonies, and religious rituals. Transparent pricing, authentic services.">
+    <meta property="og:image" content="https://sacredconnect.com/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://sacredconnect.com/">
+    <meta name="twitter:title" content="SacredConnect - Book Verified Pandits">
+    <meta name="twitter:description" content="Connect with verified pandits for pujas, ceremonies, and religious rituals.">
+    
+    <!-- Favicon (matches top-left logo style) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23ED7B12'/><stop offset='1' stop-color='%23DF6108'/></linearGradient></defs><rect x='8' y='8' width='84' height='84' rx='18' fill='url(%23g)'/><text x='50' y='67' text-anchor='middle' font-size='52' font-family='Georgia,serif' fill='white'>ॐ</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23ED7B12'/><stop offset='1' stop-color='%23DF6108'/></linearGradient></defs><rect x='8' y='8' width='84' height='84' rx='18' fill='url(%23g)'/><text x='50' y='67' text-anchor='middle' font-size='52' font-family='Georgia,serif' fill='white'>ॐ</text></svg>">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Tailwind CSS (Browser build) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Note: Removed Tailwind v4 @theme block to avoid "Unknown at rule @theme" warnings in some environments.
+         Our design tokens/colors are defined in css/styles.css instead. -->
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- API Base
+         - Local dev: auto uses http://localhost:5000/api
+         - Production: set window.__SC_API_BASE__ to your Render URL (or keep empty to use same-origin)
+    -->
+    <script>
+        // Example (production): window.__SC_API_BASE__ = 'https://your-backend.onrender.com/api';
+        // Auto default only for localhost
+        if (typeof window.__SC_API_BASE__ !== 'string') {
+            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+            window.__SC_API_BASE__ = isLocal ? 'http://localhost:5000/api' : '';
+        }
+    </script>
+</head>
+<body class="bg-[#FFFEFB] text-stone-800 font-sans antialiased overflow-x-hidden">
+    <!-- App Container -->
+    <div id="app">
+        <!-- Loader -->
+        <div id="loader" class="loader-container">
+            <div class="loader-content">
+                <div class="loader-icon">
+                    <i class="fas fa-om"></i>
+                </div>
+                <div class="loader-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <p class="loader-text">SacredConnect</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toasts -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-[200] flex flex-col gap-2 pointer-events-none"></div>
+    
+    <!-- Back to Top -->
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+    
+    <!-- WhatsApp -->
+    <a href="https://wa.me/919629184024" target="_blank" rel="noopener" class="whatsapp-btn" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="whatsapp-tooltip">Chat: +91 96291 84024</span>
+    </a>
+
+    <!-- Scripts -->
+    <script src="js/store.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+
+    <!-- Component library (future-proof, no-module) -->
+    <script src="js/components/Toast.js"></script>
+    <script src="js/components/Modal.js"></script>
+    <script src="js/components/Skeleton.js"></script>
+    <script src="js/components/EmptyState.js"></script>
+    <script src="js/components/Cards.js"></script>
+    <script src="js/components/Navbar.js"></script>
+    <script src="js/components/Footer.js"></script>
+
+    <!-- Global component facade used by pages/app -->
+    <script src="js/components.js"></script>
+
+    <script src="js/pages.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
