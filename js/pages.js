@@ -398,7 +398,7 @@ const Pages = {
       + '    <div class="auth-header">'
       + '      <div class="auth-icon"><i class="fas fa-user-plus"></i></div>'
       + '      <h1 class="auth-title">Create Account</h1>'
-      + '      <p class="auth-subtitle">Sign up using OTP</p>'
+      + '      <p class="auth-subtitle">Sign up using OTP sent to your email</p>'
       + '    </div>'
       + '    <div id="register-form-container">' + Pages.RegisterStartForm() + '</div>'
       + '    <p class="auth-footer">Already have an account? <a href="#/login">Login</a></p>'
@@ -428,11 +428,12 @@ const Pages = {
       + '</form>';
   },
 
-  RegisterOTPForm: function (phone) {
+  RegisterOTPForm: function (phone, email) {
     var formattedPhone = Utils.formatPhone(phone);
+    var emailLine = email ? ('<br><span style="color: var(--text-muted); font-weight:700;">Sent to: ' + email + '</span>') : '';
     return ''
       + '<div style="text-align: center; margin-bottom: 24px;">'
-      + '  <p style="color: var(--text-secondary); font-size: 14px;">Enter OTP sent to<br><strong style="color: var(--text-primary);">+91 ' + formattedPhone + '</strong></p>'
+      + '  <p style="color: var(--text-secondary); font-size: 14px;">Enter the 6-digit OTP sent to your email to verify<br><strong style="color: var(--text-primary);">+91 ' + formattedPhone + '</strong>' + emailLine + '</p>'
       + '</div>'
       + '<form id="register-otp-form" onsubmit="App.handleRegisterVerify(event)">'
       + '  <div class="otp-inputs">'

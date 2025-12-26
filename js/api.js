@@ -15,10 +15,28 @@
         return def;
     }
 
+    function normalizeBase(base) {
+        if (base == null) return '';
+        let b = String(base).trim();
+        if (!b) return '';
+        b = b.replace(/\/+$/, '');
+
+        // If someone stores "https://host" instead of "https://host/api", auto-fix.
+        if (b === '/api' || b.endsWith('/api')) return b;
+
+        // Absolute origins that should use /api
+        if (/^https?:\/\//i.test(b)) {
+            return b + '/api';
+        }
+
+        // Relative base without /api: keep as-is (advanced setups)
+        return b;
+    }
+
     function getBaseUrl() {
         const fromStorage = safeStorageGet('sc_api_base', null);
-        const base = (fromStorage || window.__SC_API_BASE__ || DEFAULT_BASE);
-        return String(base).replace(/\/+$/, '');
+        const raw = (fromStorage || window.__SC_API_BASE__ || DEFAULT_BASE);
+        return normalizeBase(raw);
     }
 
     function getToken() {
@@ -26,7 +44,7 @@
     }
 
     function setToken(token) {
-        if (!window.Utils?.storage) return;
+        if (!(window.Utils && window.Utils.storage)) return;
         if (token) window.Utils.storage.set('sc_token', token);
         else window.Utils.storage.remove('sc_token');
     }

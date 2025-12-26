@@ -804,15 +804,16 @@ const App = {
         Store.setState({ registerDraft: { fullName: name, phone: phone, email: email }, authPhone: phone });
 
         try {
-            await API.auth.sendOTP(phone, 'registration', email);
+            const res = await API.auth.sendOTP(phone, 'registration', email);
+            const data = res && res.data ? res.data : null;
             const container = document.getElementById('register-form-container');
             if (container) {
-                container.innerHTML = Pages.RegisterOTPForm(phone);
+                container.innerHTML = Pages.RegisterOTPForm(phone, data && data.email ? data.email : email);
                 const first = container.querySelector('.otp-input');
                 if (first) first.focus();
                 this.startOTPTimer();
             }
-            Utils.toast('OTP sent to your phone', 'success');
+            Utils.toast('OTP sent to your email', 'success');
         } catch (e) {
             Utils.toast(e.message || 'Failed to send OTP', 'error');
         }

@@ -41,12 +41,15 @@ const app = express();
 app.use(helmet());
 
 // Enable CORS
-app.use(cors({
+const corsOptions = {
     origin: process.env.FRONTEND_URL || '*',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+app.use(cors(corsOptions));
+// Ensure preflight requests always succeed (important for JSON POST requests like /auth/send-otp)
+app.options('*', cors(corsOptions));
 
 // Rate limiting - 100 requests per 15 minutes
 const limiter = rateLimit({
