@@ -58,7 +58,8 @@ otpSchema.statics.generateOTP = function(length = 6) {
 };
 
 // Static method to create and save OTP
-otpSchema.statics.createOTP = async function(phone, purpose, expiryMinutes = 10) {
+// Supports email-based delivery (still indexed by phone+pupose for verification flow)
+otpSchema.statics.createOTP = async function(phone, purpose, expiryMinutes = 10, email) {
     // Delete any existing OTPs for this phone and purpose
     await this.deleteMany({ phone, purpose });
     
@@ -71,6 +72,7 @@ otpSchema.statics.createOTP = async function(phone, purpose, expiryMinutes = 10)
     // Create OTP document
     const otpDoc = await this.create({
         phone,
+        email: email || undefined,
         otp,
         purpose,
         expiresAt

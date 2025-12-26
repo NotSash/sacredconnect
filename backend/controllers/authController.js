@@ -17,55 +17,158 @@ const { sendTemplateEmail } = require('../utils/email');
  */
 exports.sendOTP = async (req, res, next) => {
     try {
-        const { phone, purpose = 'login' } = req.body;
-        
-        // Validate phone
-        if (!phone || !isValidIndianPhone(phone)) {
+        // Login can be initiated with either phone OR email.
+        // Registration requires phone + email.
+        const { phone, email, purpose = 'login' } = req.body;
+
+        const purposeSafe = purpose || 'login';
+
+        // ----------------------------
+        // Registration: phone + email required
+        // ----------------------------
+        if (purposeSafe === 'registration') {
+            if (!phone || !isValidIndianPhone(phone)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Please provide a valid 10-digit Indian phone number'
+                });
+            }
+
+            if (!email) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Email is required for registration.'
+                });
+            }
+
+            const emailToSend = String(email).trim().toLowerCase();
+
+            const existingUser = await User.findOne({ phone });
+            if (existingUser) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'An account already exists with this phone number. Please login.'
+                });
+            }
+
+            // Create OTP and send to the provided email
+            const otpDoc = await OTP.createOTP(phone, 'registration', parseInt(process.env.OTP_EXPIRE_MINUTES || '10', 10), emailToSend);
+
+            if (process.env.NODE_ENV === 'development') {
+                console.log(`📧 OTP for ${phone} (${emailToSend}): ${otpDoc.otp}`);
+            }
+
+            try {
+                await sendTemplateEmail(emailToSend, 'otp', {
+                    otp: otpDoc.otp,
+                    purpose: 'complete your registration'
+                });
+            } catch (e) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'Failed to send OTP email. Please try again.'
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: 'OTP sent successfully to your email',
+                data: {
+                    phone,
+                    email: emailToSend,
+                    expiresIn: (parseInt(process.env.OTP_EXPIRE_MINUTES || '10', 10) * 60),
+                    ...(process.env.NODE_ENV === 'development' && { otp: otpDoc.otp })
+                }
+            });
+        }
+
+        // ----------------------------
+        // Login: phone OR email
+        // ----------------------------
+        if (!phone && !email) {
             return res.status(400).json({
                 success: false,
-                message: 'Please provide a valid 10-digit Indian phone number'
+                message: 'Please provide either phone or email to login.'
             });
         }
-        
-        // Check if user exists (for login vs registration)
-        const existingUser = await User.findOne({ phone });
-        
-        if (purpose === 'login' && !existingUser) {
-            return res.status(404).json({
-                success: false,
-                message: 'No account found with this phone number. Please register first.'
-            });
+
+        let user = null;
+        let emailToSend = null;
+        let phoneForOtp = null;
+
+        if (phone) {
+            if (!isValidIndianPhone(phone)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Please provide a valid 10-digit Indian phone number'
+                });
+            }
+
+            user = await User.findOne({ phone });
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'No account found with this phone number. Please register first.'
+                });
+            }
+
+            if (!user.email) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Email is not set for this account. Please login with email or contact support.'
+                });
+            }
+
+            emailToSend = user.email;
+            phoneForOtp = user.phone;
+        } else {
+            // email login
+            const emailNorm = String(email).trim().toLowerCase();
+            user = await User.findOne({ email: emailNorm });
+
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'No account found with this email. Please register first.'
+                });
+            }
+
+            emailToSend = user.email;
+            phoneForOtp = user.phone;
         }
-        
-        if (purpose === 'registration' && existingUser) {
-            return res.status(400).json({
-                success: false,
-                message: 'An account already exists with this phone number. Please login.'
-            });
-        }
-        
-        // Create OTP
-        const otpDoc = await OTP.createOTP(phone, purpose);
-        
-        // In development, log OTP (in production, send via SMS)
+
+        // Create OTP linked to the user's phone, but store the email too.
+        // This lets us verify by email or phone.
+        const otpDoc = await OTP.createOTP(phoneForOtp, 'login', parseInt(process.env.OTP_EXPIRE_MINUTES || '10', 10), emailToSend);
+
         if (process.env.NODE_ENV === 'development') {
-            console.log(`📱 OTP for ${phone}: ${otpDoc.otp}`);
+            console.log(`📧 OTP for ${phoneForOtp} (${emailToSend}): ${otpDoc.otp}`);
         }
-        
-        // TODO: Integrate SMS gateway (MSG91, Twilio, etc.)
-        // await sendSMS(phone, `Your SacredConnect OTP is ${otpDoc.otp}. Valid for 10 minutes.`);
-        
-        res.status(200).json({
+
+        try {
+            await sendTemplateEmail(emailToSend, 'otp', {
+                otp: otpDoc.otp,
+                purpose: 'login'
+            });
+        } catch (e) {
+            return res.status(500).json({
+                success: false,
+                message: 'Failed to send OTP email. Please try again.'
+            });
+        }
+
+        return res.status(200).json({
             success: true,
-            message: 'OTP sent successfully',
+            message: 'OTP sent successfully to your email',
             data: {
-                phone,
-                expiresIn: 10 * 60, // 10 minutes in seconds
-                // Include OTP in dev mode for testing
+                // We return both, so frontend can verify with either identifier.
+                phone: phoneForOtp,
+                email: emailToSend,
+                expiresIn: (parseInt(process.env.OTP_EXPIRE_MINUTES || '10', 10) * 60),
                 ...(process.env.NODE_ENV === 'development' && { otp: otpDoc.otp })
             }
         });
-        
+
     } catch (error) {
         next(error);
     }
@@ -78,79 +181,83 @@ exports.sendOTP = async (req, res, next) => {
  */
 exports.verifyOTP = async (req, res, next) => {
     try {
-        const { phone, otp, purpose = 'login' } = req.body;
-        
-        // Validate inputs
-        if (!phone || !otp) {
+        // Verify can be done with phone OR email (identifier).
+        const { phone, email, otp, purpose = 'login' } = req.body;
+
+        if (!otp) {
             return res.status(400).json({
                 success: false,
-                message: 'Phone number and OTP are required'
+                message: 'OTP is required'
             });
         }
-        
-        // Find OTP document
-        const otpDoc = await OTP.findOne({
-            phone,
-            purpose,
-            isUsed: false,
-            expiresAt: { $gt: new Date() }
-        }).sort({ createdAt: -1 });
-        
+
+        // Find the latest valid OTP doc
+        let otpDoc = null;
+        if (phone) {
+            otpDoc = await OTP.findOne({
+                phone,
+                purpose,
+                isUsed: false,
+                expiresAt: { $gt: new Date() }
+            }).sort({ createdAt: -1 });
+        } else if (email) {
+            const emailNorm = String(email).trim().toLowerCase();
+            otpDoc = await OTP.findOne({
+                email: emailNorm,
+                purpose,
+                isUsed: false,
+                expiresAt: { $gt: new Date() }
+            }).sort({ createdAt: -1 });
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: 'Phone or email is required'
+            });
+        }
+
         if (!otpDoc) {
             return res.status(400).json({
                 success: false,
                 message: 'OTP expired or not found. Please request a new OTP.'
             });
         }
-        
-        // Verify OTP
-        const result = await otpDoc.verifyOTP(otp);
-        
-        if (!result.valid) {
+
+        // Verify OTP (handles attempts + isUsed)
+        const verifyResult = await otpDoc.verifyOTP(otp);
+        if (!verifyResult.valid) {
             return res.status(400).json({
                 success: false,
-                message: result.message,
-                attemptsRemaining: result.attemptsRemaining
+                message: verifyResult.message,
+                attemptsRemaining: verifyResult.attemptsRemaining
             });
         }
-        
-        // Get or create user
-        let user = await User.findOne({ phone });
-        let isNewUser = false;
-        
-        if (!user && purpose === 'registration') {
-            // This shouldn't happen as registration has a separate endpoint
-            // But handle it gracefully
-            user = await User.create({
-                phone,
-                fullName: 'User',
-                isPhoneVerified: true
-            });
-            isNewUser = true;
-        } else if (user) {
-            // Update phone verification status
-            user.isPhoneVerified = true;
-            user.lastLoginAt = new Date();
-            await user.save();
-        }
-        
+
+        // Always lookup user by phone stored on OTP doc (canonical identifier)
+        const phoneForUser = otpDoc.phone;
+        const user = await User.findOne({ phone: phoneForUser });
+
         if (!user) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found. Please register first.'
             });
         }
-        
+
+        // Update verification & login time
+        user.isPhoneVerified = true;
+        user.lastLoginAt = new Date();
+        await user.save();
+
         // Generate token
         const token = user.generateAuthToken();
-        
+
         // Get pandit profile if user is a pandit
         let panditProfile = null;
         if (user.role === 'pandit') {
             panditProfile = await Pandit.findOne({ user: user._id });
         }
-        
-        res.status(200).json({
+
+        return res.status(200).json({
             success: true,
             message: 'Login successful',
             data: {
@@ -170,11 +277,10 @@ exports.verifyOTP = async (req, res, next) => {
                     displayName: panditProfile.displayName,
                     status: panditProfile.status,
                     verificationLevel: panditProfile.verificationLevel
-                } : null,
-                isNewUser
+                } : null
             }
         });
-        
+
     } catch (error) {
         next(error);
     }

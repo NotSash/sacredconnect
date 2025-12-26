@@ -80,7 +80,8 @@ const templates = {
     }),
     
     // OTP email
-    otp: (otp, purpose) => ({
+    // NOTE: sendTemplateEmail() passes a single argument. We accept an object to keep it consistent.
+    otp: ({ otp, purpose }) => ({
         subject: `Your OTP for SacredConnect - ${otp}`,
         html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

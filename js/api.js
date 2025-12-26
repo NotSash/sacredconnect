@@ -78,11 +78,24 @@
         },
 
         auth: {
-            async sendOTP(phone, purpose) {
-                return request('POST', '/auth/send-otp', { phone, purpose: purpose || 'login' }, { auth: false });
+            // identifier can be phone OR email
+            async sendOTP(identifier, purpose, email) {
+                const payload = { purpose: purpose || 'login' };
+                // detect if identifier is email
+                if (identifier && String(identifier).includes('@')) payload.email = String(identifier).trim().toLowerCase();
+                else payload.phone = identifier;
+
+                // For registration, we also pass email explicitly (required)
+                if (email) payload.email = String(email).trim().toLowerCase();
+
+                return request('POST', '/auth/send-otp', payload, { auth: false });
             },
-            async verifyOTP(phone, otp, purpose) {
-                return request('POST', '/auth/verify-otp', { phone, otp, purpose: purpose || 'login' }, { auth: false });
+            async verifyOTP(identifier, otp, purpose) {
+                const payload = { otp, purpose: purpose || 'login' };
+                if (identifier && String(identifier).includes('@')) payload.email = String(identifier).trim().toLowerCase();
+                else payload.phone = identifier;
+
+                return request('POST', '/auth/verify-otp', payload, { auth: false });
             },
             async register(payload) {
                 return request('POST', '/auth/register', payload, { auth: false });

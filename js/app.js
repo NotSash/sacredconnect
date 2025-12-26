@@ -655,29 +655,40 @@ const App = {
     async handleLoginPhone(e) {
         e.preventDefault();
 
-        const phoneInput = document.getElementById('login-phone');
-        const phone = (phoneInput && phoneInput.value ? phoneInput.value : '').trim();
+        const inputEl = document.getElementById('login-identifier');
+        const identifier = (inputEl && inputEl.value ? inputEl.value : '').trim();
 
-        if (!Utils.isValidPhone(phone)) {
-            Utils.toast('Please enter a valid 10-digit phone number', 'error');
-            phoneInput && phoneInput.focus();
+        const isEmail = identifier.includes('@');
+        const isPhone = Utils.isValidPhone(identifier);
+
+        if (!identifier || (!isEmail && !isPhone)) {
+            Utils.toast('Enter a valid phone number or email address', 'error');
+            inputEl && inputEl.focus();
             return;
         }
 
-        Store.setState({ authPhone: phone });
+        // store identifier for verification step (could be phone or email)
+        Store.setState({ authPhone: identifier });
 
         try {
-            await API.auth.sendOTP(phone, 'login');
+            const res = await API.auth.sendOTP(identifier, 'login');
+            const data = res && res.data ? res.data : null;
+
+            // If user typed email, backend returns phone in response data.
+            // Store returned phone for robustness.
+            if (data && data.phone) {
+                Store.setState({ authPhone: identifier, authResolvedPhone: data.phone, authEmail: data.email || '' });
+            }
 
             const container = document.getElementById('auth-form-container');
             if (container) {
-                container.innerHTML = Pages.LoginOTPForm(phone);
+                container.innerHTML = Pages.LoginOTPForm(identifier, data && data.email ? data.email : null);
                 const firstInput = container.querySelector('.otp-input');
                 if (firstInput) firstInput.focus();
                 this.startOTPTimer();
             }
 
-            Utils.toast('OTP sent to your phone', 'success');
+            Utils.toast('OTP sent successfully', 'success');
         } catch (err) {
             if (err.status === 404) {
                 Utils.toast('No account found. Please register first.', 'warning');
@@ -699,10 +710,10 @@ const App = {
             return;
         }
 
-        const phone = Store.getState().authPhone;
+        const identifier = Store.getState().authPhone;
 
         try {
-            const res = await API.auth.verifyOTP(phone, otp, 'login');
+            const res = await API.auth.verifyOTP(identifier, otp, 'login');
             const data = res && res.data ? res.data : null;
             if (!data || !data.token || !data.user) throw new Error('Invalid login response');
 
@@ -755,9 +766,9 @@ const App = {
     },
 
     async resendOTP() {
-        const phone = Store.getState().authPhone;
+        const identifier = Store.getState().authPhone;
         try {
-            await API.auth.sendOTP(phone, 'login');
+            await API.auth.sendOTP(identifier, 'login');
             Utils.toast('OTP resent', 'success');
         } catch (e) {
             Utils.toast('Failed to resend OTP', 'error');
@@ -770,9 +781,9 @@ const App = {
 
     resetLoginForm() {
         if (this.otpTimer) clearInterval(this.otpTimer);
-        Store.setState({ authPhone: '' });
+        Store.setState({ authPhone: '', authResolvedPhone: null, authEmail: null });
         const container = document.getElementById('auth-form-container');
-        if (container) container.innerHTML = Pages.LoginPhoneForm();
+        if (container) container.innerHTML = Pages.LoginIdentifierForm();
     },
 
     async handleRegisterStart(e) {
@@ -788,12 +799,12 @@ const App = {
 
         if (!name) return Utils.toast('Please enter your name', 'error');
         if (!Utils.isValidPhone(phone)) return Utils.toast('Please enter a valid phone number', 'error');
-        if (email && !Utils.isValidEmail(email)) return Utils.toast('Please enter a valid email', 'error');
+        if (!email || !Utils.isValidEmail(email)) return Utils.toast('Please enter a valid email', 'error');
 
-        Store.setState({ registerDraft: { fullName: name, phone: phone, email: email || '' }, authPhone: phone });
+        Store.setState({ registerDraft: { fullName: name, phone: phone, email: email }, authPhone: phone });
 
         try {
-            await API.auth.sendOTP(phone, 'registration');
+            await API.auth.sendOTP(phone, 'registration', email);
             const container = document.getElementById('register-form-container');
             if (container) {
                 container.innerHTML = Pages.RegisterOTPForm(phone);

@@ -338,33 +338,39 @@ const Pages = {
       + '    <div class="auth-header">'
       + '      <div class="auth-icon"><i class="fas fa-om"></i></div>'
       + '      <h1 class="auth-title">Welcome Back</h1>'
-      + '      <p class="auth-subtitle">Login using OTP</p>'
+      + '      <p class="auth-subtitle">Login with Phone or Email (OTP via email)</p>'
       + '    </div>'
-      + '    <div id="auth-form-container">' + Pages.LoginPhoneForm() + '</div>'
+      + '    <div id="auth-form-container">' + Pages.LoginIdentifierForm() + '</div>'
       + '    <p class="auth-footer">Don\'t have an account? <a href="#/register">Sign up</a></p>'
       + '  </div>'
       + '</main>';
   },
 
-  LoginPhoneForm: function () {
+  LoginIdentifierForm: function () {
     return ''
-      + '<form id="login-phone-form" onsubmit="App.handleLoginPhone(event)">'
+      + '<form id="login-identifier-form" onsubmit="App.handleLoginPhone(event)">'
       + '  <div class="input-group">'
-      + '    <label class="label">Phone Number</label>'
-      + '    <div class="phone-input">'
-      + '      <span class="phone-input-prefix">+91</span>'
-      + '      <input type="tel" id="login-phone" class="input" placeholder="Enter your phone number" maxlength="10" required>'
+      + '    <label class="label">Phone or Email</label>'
+      + '    <div class="input-icon">'
+      + '      <i class="fas fa-user"></i>'
+      + '      <input type="text" id="login-identifier" class="input" placeholder="Enter phone (10 digits) or email" autocomplete="username" required>'
+      + '    </div>'
+      + '    <div style="margin-top:8px; font-size: 13px; color: var(--text-muted); line-height:1.6;">'
+      + '      OTP will be sent to your registered email. (If you enter email, we\'ll use that directly.)'
       + '    </div>'
       + '  </div>'
-      + '  <button type="submit" class="btn btn-primary w-full">Send Code <i class="fas fa-arrow-right"></i></button>'
+      + '  <button type="submit" class="btn btn-primary w-full">Send OTP <i class="fas fa-arrow-right"></i></button>'
       + '</form>';
   },
 
-  LoginOTPForm: function (phone) {
-    var formattedPhone = Utils.formatPhone(phone);
+  LoginOTPForm: function (identifier, email) {
+    var isEmail = identifier && identifier.indexOf('@') >= 0;
+    var display = isEmail ? identifier : ('+91 ' + Utils.formatPhone(identifier));
+    var emailLine = email ? ('<br><span style="color: var(--text-muted); font-weight:700;">Sent to: ' + email + '</span>') : '';
+
     return ''
       + '<div style="text-align: center; margin-bottom: 24px;">'
-      + '  <p style="color: var(--text-secondary); font-size: 14px;">We have sent a 6-digit OTP to<br><strong style="color: var(--text-primary);">+91 ' + formattedPhone + '</strong></p>'
+      + '  <p style="color: var(--text-secondary); font-size: 14px;">Enter the 6-digit OTP sent to your email for<br><strong style="color: var(--text-primary);">' + display + '</strong>' + emailLine + '</p>'
       + '</div>'
       + '<form id="login-otp-form" onsubmit="App.handleLoginOTP(event)">'
       + '  <div class="otp-inputs">'
@@ -415,8 +421,8 @@ const Pages = {
       + '    </div>'
       + '  </div>'
       + '  <div class="input-group">'
-      + '    <label class="label">Email (Optional)</label>'
-      + '    <input type="email" id="register-email" class="input" placeholder="Enter your email">'
+      + '    <label class="label">Email</label>'
+      + '    <input type="email" id="register-email" class="input" placeholder="Enter your email" required>'
       + '  </div>'
       + '  <button type="submit" class="btn btn-primary w-full">Send Code <i class="fas fa-arrow-right"></i></button>'
       + '</form>';
