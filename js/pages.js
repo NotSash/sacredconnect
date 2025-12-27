@@ -383,7 +383,7 @@ const Pages = {
       + '  </div>'
       + '  <p class="otp-timer" id="otp-timer">Resend OTP in <span id="otp-countdown">30</span>s</p>'
       + '  <button type="submit" class="btn btn-primary w-full mb-4">Verify & Login <i class="fas fa-check"></i></button>'
-      + '  <button type="button" class="btn btn-ghost w-full" onclick="App.resetLoginForm()"><i class="fas fa-arrow-left"></i>Change Phone Number</button>'
+      + '  <button type="button" class="btn btn-ghost w-full" onclick="App.resetLoginForm()"><i class="fas fa-arrow-left"></i>Change Phone/Email</button>'
       + '</form>';
   },
 

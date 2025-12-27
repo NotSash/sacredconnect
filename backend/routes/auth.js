@@ -18,8 +18,18 @@ const {
 const { protect } = require('../middleware/auth');
 
 // Public routes
+// Primary (documented) endpoints
 router.post('/send-otp', sendOTP);
 router.post('/verify-otp', verifyOTP);
+
+// Backward/alternate spellings (prevent 404s if older client/backend uses different naming)
+router.post('/sendOtp', sendOTP);
+router.post('/sendOTP', sendOTP);
+router.post('/send_otp', sendOTP);
+router.post('/verifyOtp', verifyOTP);
+router.post('/verifyOTP', verifyOTP);
+router.post('/verify_otp', verifyOTP);
+
 router.post('/register', register);
 router.post('/register-pandit', registerPandit);
 

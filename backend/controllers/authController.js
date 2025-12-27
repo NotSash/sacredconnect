@@ -296,10 +296,11 @@ exports.register = async (req, res, next) => {
         const { phone, fullName, email, otp } = req.body;
         
         // Validate required fields
-        if (!phone || !fullName || !otp) {
+        // Email is required because OTP is delivered via email in this MVP
+        if (!phone || !fullName || !otp || !email) {
             return res.status(400).json({
                 success: false,
-                message: 'Phone, full name, and OTP are required'
+                message: 'Phone, full name, email, and OTP are required'
             });
         }
         
