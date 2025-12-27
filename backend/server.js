@@ -121,6 +121,25 @@ app.get('/api', (req, res) => {
 });
 
 // Mount routes
+// Hard fallback routes for auth (prevents 404s if router mounting/caching issues occur)
+// These call the same controllers as routes/auth.js
+try {
+    const authController = require('./controllers/authController');
+    if (authController && typeof authController.sendOTP === 'function') {
+        app.post('/api/auth/send-otp', authController.sendOTP);
+        app.post('/api/auth/verify-otp', authController.verifyOTP);
+        // Aliases
+        app.post('/api/auth/sendOtp', authController.sendOTP);
+        app.post('/api/auth/sendOTP', authController.sendOTP);
+        app.post('/api/auth/send_otp', authController.sendOTP);
+        app.post('/api/auth/verifyOtp', authController.verifyOTP);
+        app.post('/api/auth/verifyOTP', authController.verifyOTP);
+        app.post('/api/auth/verify_otp', authController.verifyOTP);
+    }
+} catch (_) {
+    // ignore
+}
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/pandits', panditRoutes);

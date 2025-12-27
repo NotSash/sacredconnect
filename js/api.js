@@ -106,14 +106,30 @@
                 // For registration, we also pass email explicitly (required)
                 if (email) payload.email = String(email).trim().toLowerCase();
 
-                return request('POST', '/auth/send-otp', payload, { auth: false });
+                // Fallback: some deployments might expose /auth/sendOtp only.
+                // Try primary, then fallback if 404.
+                try {
+                    return await request('POST', '/auth/send-otp', payload, { auth: false });
+                } catch (e) {
+                    if (e && e.status === 404) {
+                        return await request('POST', '/auth/sendOtp', payload, { auth: false });
+                    }
+                    throw e;
+                }
             },
             async verifyOTP(identifier, otp, purpose) {
                 const payload = { otp, purpose: purpose || 'login' };
                 if (identifier && String(identifier).includes('@')) payload.email = String(identifier).trim().toLowerCase();
                 else payload.phone = identifier;
 
-                return request('POST', '/auth/verify-otp', payload, { auth: false });
+                try {
+                    return await request('POST', '/auth/verify-otp', payload, { auth: false });
+                } catch (e) {
+                    if (e && e.status === 404) {
+                        return await request('POST', '/auth/verifyOtp', payload, { auth: false });
+                    }
+                    throw e;
+                }
             },
             async register(payload) {
                 return request('POST', '/auth/register', payload, { auth: false });

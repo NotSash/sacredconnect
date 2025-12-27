@@ -446,6 +446,9 @@ const Pages = {
       + '  </div>'
       + '  <p class="otp-timer" id="otp-timer">Resend OTP in <span id="otp-countdown">30</span>s</p>'
       + '  <button type="submit" class="btn btn-primary w-full mb-4">Verify & Create Account <i class="fas fa-check"></i></button>'
+      + '  <div style="margin-top:10px; text-align:center; font-size: 13px; color: var(--text-muted);">'
+      + '    Didn\'t get the email? Check Spam/Promotions or resend after the timer ends.'
+      + '  </div>'
       + '  <button type="button" class="btn btn-ghost w-full" onclick="App.resetRegisterForm()"><i class="fas fa-arrow-left"></i>Change Details</button>'
       + '</form>';
   },
